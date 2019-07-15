@@ -107,6 +107,10 @@ export 'NS_LOG=FirstScriptExample=info'
 
 ### 2.1 Overiding Default Attribute
 
+```sh
+./waf --run "scratch/myfirst --PrintHelp"
+```
+
 ### 2.2 Hooking your own value
 
 ## 3 Using the Tracing System
