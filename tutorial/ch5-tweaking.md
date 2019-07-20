@@ -111,7 +111,87 @@ export 'NS_LOG=FirstScriptExample=info'
 ./waf --run "scratch/myfirst --PrintHelp"
 ```
 
+Output:
+
+```sh
+ubuntu@ubuntu-node2:~/projects/ns3/tarball/ns-allinone-3.29/ns-3.29$ ./waf --run "scratch/myfirst --PrintHelp" 
+Waf: Entering directory `/home/ubuntu/projects/ns3/tarball/ns-allinone-3.29/ns-3.29/build'
+Waf: Leaving directory `/home/ubuntu/projects/ns3/tarball/ns-allinone-3.29/ns-3.29/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (13.716s)
+myfirst [General Arguments]
+
+General Arguments:
+    --PrintGlobals:              Print the list of globals.
+    --PrintGroups:               Print the list of groups.
+    --PrintGroup=[group]:        Print all TypeIds of group.
+    --PrintTypeIds:              Print all TypeIds.
+    --PrintAttributes=[typeid]:  Print all attributes of typeid.
+    --PrintHelp:                 Print this help message.
+```
+
+```sh
+# Override attribute: DataRate=5Mbps
+./waf --run "scratch/myfirst --ns3::PointToPointNetDevice::DataRate=5Mbps"
+
+# Override attribute: DataRate=5Mbps and Delay=2ms
+./waf --run "scratch/myfirst --ns3::PointToPointNetDevice::DataRate=5Mbps --ns3::PointToPointChannel::Delay=2ms"
+
+# --PrintGroup=[id]
+# --PrintGroup=PointToPoint
+./waf --run "scratch/myfirst --PrintGroup=PointToPoint"
+
+# --PrintGroup=Csma
+./waf --run "scratch/myfirst --PrintGroup=Csma"
+```
+
 ### 2.2 Hooking your own value
+
+Modify `scratch/myfirst.cc` as follow:
+
+```c
+main (int argc, char *argv[])
+{
+  uint32_t nPackets = 1;
+
+  CommandLine cmd;
+  cmd.AddValue("nPackets", "Number of packets to echo", nPackets);
+  cmd.Parse (argc, argv);
+  ...
+}
+```
+
+```sh
+./waf --run "scratch/myfirst --PrintHelp"
+```
+
+Output:
+
+```sh
+ubuntu@ubuntu-node2:~/projects/ns3/tarball/ns-allinone-3.29/ns-3.29$ ./waf --run "scratch/myfirst --PrintHelp" 
+Waf: Entering directory `/home/ubuntu/projects/ns3/tarball/ns-allinone-3.29/ns-3.29/build'
+[2691/2767] Compiling scratch/myfirst.cc
+[2726/2767] Linking build/scratch/myfirst
+Waf: Leaving directory `/home/ubuntu/projects/ns3/tarball/ns-allinone-3.29/ns-3.29/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (17.257s)
+myfirst [Program Options] [General Arguments]
+
+Program Options:
+    --nPackets:  Number of packets to echo [1]
+
+General Arguments:
+    --PrintGlobals:              Print the list of globals.
+    --PrintGroups:               Print the list of groups.
+    --PrintGroup=[group]:        Print all TypeIds of group.
+    --PrintTypeIds:              Print all TypeIds.
+    --PrintAttributes=[typeid]:  Print all attributes of typeid.
+    --PrintHelp:                 Print this help message.
+```
+
+```sh
+./waf --run "scratch/myfirst --nPackets=2"
+```
 
 ## 3 Using the Tracing System
 
